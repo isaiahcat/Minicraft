@@ -8,6 +8,8 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -115,8 +117,13 @@ public class Game extends Canvas implements Runnable {
 			}
 		}
 		try {
-			screen = new Screen(WIDTH, HEIGHT, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
-			lightScreen = new Screen(WIDTH, HEIGHT, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
+			ClassLoader classLoader = Game.class.getClassLoader();
+			InputStream inputStream = classLoader.getResourceAsStream("res/icons.png");
+			assert inputStream != null;
+			BufferedImage bufferedImage = ImageIO.read(inputStream);
+			assert bufferedImage != null;
+			screen = new Screen(WIDTH, HEIGHT, new SpriteSheet(bufferedImage));
+			lightScreen = new Screen(WIDTH, HEIGHT, new SpriteSheet(bufferedImage));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
